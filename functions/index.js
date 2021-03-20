@@ -3,35 +3,19 @@
 const functions = require('firebase-functions');
 const express = require('express');
 const line = require('@line/bot-sdk');
+const searchFromText = require('./search_from_text');
 
-const firebase = require("firebase");
-require("firebase/firestore");
-require('dotenv').config();
-
-const firebaseConfig = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-    databaseUrl: process.env.FIREBASE_DATABSE_URL,
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.FIREBASE_SENDER_ID,
-    appId: process.env.FIREBASE_APP_ID,
-}
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const initDb = require("./db");
 
 const lineConfig = {
     channelSecret: functions.config().linebot.channel_secret,
     channelAccessToken: functions.config().linebot.channel_access_token
 };
 
-console.log(functions.config().linebot.channel_secret)
-
 const app = express();
+const db = initDb();
 
 app.post('/webhook', line.middleware(lineConfig), (req, res) => {
-    console.log(req.body.events);
     Promise
         .all(req.body.events.map(handleEvent))
         .then((result) => res.json(result));
@@ -57,11 +41,24 @@ async function handleEvent(event) {
             message: event.message.text
         })
     }
-    // return ;
-    return client.replyMessage(event.replyToken, {
-        type: 'text',
-        text: event.message.text //実際に返信の言葉を入れる箇所
-    });
+    const messages = [];
+    searchFromText(event.message.text, db, (docs) => {
+        docs.map((doc) => {
+            console.log({data: doc.data().charactor_name, stations: doc.data().name})
+        })
+        docs.map((doc) => {
+            messages.push(
+                {
+                    type: 'text',
+                    text: `${doc.data().charactor_name}は ${doc.data().name}にいるよ` //実際に返信の言葉を入れる箇所
+                }
+            )
+            console.log({data: doc.data().charactor_name, stations: doc.data().name})
+        })
+        client.replyMessage(event.replyToken, messages)
+    })
+
+    return client.replyMessage(event.replyToken, messages);
 }
 
 exports.app = functions.https.onRequest(app);
