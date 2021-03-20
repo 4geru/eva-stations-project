@@ -4,6 +4,7 @@ const functions = require('firebase-functions');
 const express = require('express');
 const line = require('@line/bot-sdk');
 const searchFromText = require('./search_from_text');
+const profileContent = require('./profile_content');
 
 const initDb = require("./db");
 
@@ -43,19 +44,31 @@ async function handleEvent(event) {
     }
     const messages = [];
     searchFromText(event.message.text, db, (docs) => {
-        docs.map((doc) => {
-            console.log({data: doc.data().charactor_name, stations: doc.data().name})
-        })
-        docs.map((doc) => {
-            messages.push(
-                {
-                    type: 'text',
-                    text: `${doc.data().charactor_name}は ${doc.data().name}にいるよ` //実際に返信の言葉を入れる箇所
-                }
-            )
-            console.log({data: doc.data().charactor_name, stations: doc.data().name})
-        })
-        client.replyMessage(event.replyToken, messages)
+        let contents = []
+        // docs.map((doc) => {
+        //     contents.push(profileContent({
+        //         id: doc.id,
+        //         name: doc.data().name,
+        //         station: doc.data().station,
+        //         place_guide: doc.data().place_guide,
+        //         info: doc.data().info
+        //     }))
+        // })
+        return client.replyMessage(event.replyToken, 
+            {
+              "type": "flex",
+              "altText": "This is a Flex Message",
+              "contents": [profileContent({
+                id: doc.id,
+                name: doc.data().name,
+                station: doc.data().station,
+                place_guide: doc.data().place_guide,
+                info: doc.data().info
+            })]
+            }
+        ).catch(err => {
+            console.log(JSON.stringify(err))
+        });
     })
 
     return client.replyMessage(event.replyToken, messages);
