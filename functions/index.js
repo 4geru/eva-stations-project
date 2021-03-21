@@ -25,6 +25,7 @@ app.post('/webhook', line.middleware(lineConfig), (req, res) => {
 const client = new line.Client(lineConfig);
 
 async function handleEvent(event) {
+    console.log(JSON.stringify(event))
     if (event.type !== 'message' || event.message.type !== 'text') {
         return Promise.resolve(null);
     }
@@ -45,28 +46,46 @@ async function handleEvent(event) {
     const messages = [];
     searchFromText(event.message.text, db, (docs) => {
         let contents = []
-        // docs.map((doc) => {
-        //     contents.push(profileContent({
-        //         id: doc.id,
-        //         name: doc.data().name,
-        //         station: doc.data().station,
-        //         place_guide: doc.data().place_guide,
-        //         info: doc.data().info
-        //     }))
-        // })
-        return client.replyMessage(event.replyToken, 
-            {
-              "type": "flex",
-              "altText": "This is a Flex Message",
-              "contents": [profileContent({
+
+        docs.map(doc => {
+            contents.push(profileContent({
                 id: doc.id,
+                charactor_name: doc.data().charactor_name,
                 name: doc.data().name,
-                station: doc.data().station,
+                image_url: doc.data().image_url,
                 place_guide: doc.data().place_guide,
                 info: doc.data().info
-            })]
+            }))
+        })
+
+        return client.replyMessage(event.replyToken, [
+            {
+                "type": "flex",
+                "altText": "検索結果を表示中です",
+                "contents": {
+                  "type": "carousel",
+                  "contents": contents
+                },
+                "quickReply": {
+                    "items": [
+                      {
+                        "type": "action",
+                        "action": {
+                          "type": "location",
+                          "label": "駅を登録"
+                        }
+                      },
+                      {
+                        "type": "action",
+                        "action": {
+                          "type": "location",
+                          "label": "GPS検索"
+                        }
+                      }
+                    ]
+                  }
             }
-        ).catch(err => {
+        ]).catch(err => {
             console.log(JSON.stringify(err))
         });
     })
