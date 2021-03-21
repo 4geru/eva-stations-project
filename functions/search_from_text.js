@@ -16,13 +16,13 @@ const searchFromText = async(searchText, db, resolve) => {
                 const matchLength = intersection(searchText.split(''), doc.data().search_index).length
                 if (matchLength > hitWords) {
                     hitWords = matchLength;
-                    hit = [doc]
+                    hit = [doc];
                 } else if (matchLength == hitWords) {
-                    hit.push(doc)
+                    hit.push(doc);
                 }
             });
             resolve(hit)
-            return ;
+            return;
         })
 }
 

@@ -39,7 +39,7 @@ async function handleEvent(event) {
     client.replyMessage(event.replyToken, [
         {
             type: 'text',
-            text: `${event.type} ${event.message.type} ${event.type === 'message' && event.message.type === 'text'}`,
+            text: `${event.type} ${event.message.type} ${event.type === 'message' && event.message.type === 'text'}`
         }
     ])
     return Promise.resolve(null);

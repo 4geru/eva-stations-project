@@ -12,7 +12,7 @@ const profileContent = ({id, name, charactor_name, image_url, place_guide, info,
             "text": `👤 ${charactor_name}`,
             "weight": "regular",
             "size": "xl",
-            "color": "#000000",
+            "color": "#ffffff",
             "wrap": true,
             "contents": []
           }
