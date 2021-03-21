@@ -3,8 +3,9 @@
 const functions = require('firebase-functions');
 const express = require('express');
 const line = require('@line/bot-sdk');
-const messageHandler = require('./handler/message_handler')
-const postbackHandler = require('./handler/postback_handler')
+const messageHandler = require('./handler/message_handler');
+const locationHandler = require('./handler/location_handler');
+const postbackHandler = require('./handler/postback_handler');
 
 const initDb = require("./db");
 
@@ -30,10 +31,13 @@ async function handleEvent(event) {
         messageHandler(client, event, db);
         return Promise.resolve(null);
     }
+    if (event.type === 'message' && event.message.type === 'location') {
+        locationHandler(client, event, db);
+        return Promise.resolve(null);
+    }
     if (event.type === "postback") {
         const data = JSON.parse(event.postback.data);
         postbackHandler(client, event, db, data);
-
         return Promise.resolve(null);
     }
     client.replyMessage(event.replyToken, [
