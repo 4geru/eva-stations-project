@@ -31,6 +31,14 @@ const createSearchStationsResponse = (docs, userId) => {
           {
             "type": "action",
             "action": {
+              "type": "uri",
+              "label": "最新情報",
+              "uri": "https://twitter.com/jre_eva_dsr"
+            }
+          },
+          {
+            "type": "action",
+            "action": {
               "type": "location",
               "label": "GPS検索"
             }
@@ -39,8 +47,17 @@ const createSearchStationsResponse = (docs, userId) => {
             "type": "action",
             "action": {
               "type": "postback",
+              "data": "{\"type\":\"registrationStation\"}",
+              "label": "登録一覧",
+              "text": "登録一覧を表示する"
+            }
+          },
+          {
+            "type": "action",
+            "action": {
+              "type": "postback",
               "data": "{\"type\":\"allStation\"}",
-              "label": "全ての駅を見る",
+              "label": "全ての駅",
               "text": "全ての駅を表示する"
             }
           }

@@ -2,7 +2,7 @@
 
 const chunk = require('lodash/chunk');
 
-const allStations = (db, userId, func) => {
+const allStations = (db, func) => {
     db.collection("stations")
     .orderBy("ekispart_id", "asc")
     .get()
