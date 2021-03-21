@@ -1,8 +1,9 @@
-const profileContent = ({id, name, charactor_name, image_url, place_guide, info}) => {
+const profileContent = ({id, name, charactor_name, image_url, place_guide, info, registration}) => {
     return {
       "type": "bubble",
       "direction": "ltr",
       "header": {
+        "backgroundColor": (registration ? "#e50000" : "#5b496c"),
         "type": "box",
         "layout": "vertical",
         "contents": [
@@ -22,7 +23,8 @@ const profileContent = ({id, name, charactor_name, image_url, place_guide, info}
         "url": image_url || "https://pbs.twimg.com/media/Ew06IcfVEAAXbjc?format=jpg&name=4096x4096",
         "size": "full",
         "aspectRatio": "1.51:1",
-        "backgroundColor": "#FFFFFFFF"
+        "backgroundColor": "#FFFFFFFF",
+        "offsetTop": "10px"
       },
       "body": {
         "type": "box",
@@ -91,17 +93,43 @@ const profileContent = ({id, name, charactor_name, image_url, place_guide, info}
         "layout": "vertical",
         "spacing": "sm",
         "contents": [
+          ( registration ?
+            {
+              "type": "button",
+              "action": {
+                "type": "postback",
+                "label": `${name}駅を解除`,
+                "text": `${name}駅を解除する`,
+                "data": JSON.stringify({type: 'unRegistration', docId: id, stationName: name})
+              },
+              "color": "#e50000",
+              "margin": "sm",
+              "style": "primary"
+            } :
+            {
+              "type": "button",
+              "action": {
+                "type": "postback",
+                "label": `${name}駅を登録`,
+                "text": `${name}駅を登録する`,
+                "data": JSON.stringify({type: 'registration', docId: id, stationName: name})
+              },
+              "color": "#5b496c",
+              "margin": "sm",
+              "style": "primary"
+            }
+          ),
           {
             "type": "button",
             "action": {
               "type": "uri",
-              "label": "向かう",
+              "label": `${name}駅に向かう`,
               "uri": "https://linecorp.com"
             },
-            "color": "#52D053",
+            "color": ( registration ? "#ffab00" : "#52D053" ),
             "margin": "sm",
             "style": "primary"
-          }
+          },
         ]
       }
     }

@@ -1,9 +1,11 @@
+'use strict';
+
 const intersection = require('lodash/intersection');
 
 // searchText: string: 検索ワード
 // db: firestore.db
 // resolve: function: 検索結果でしたいこと
-searchFromText = async(searchText, db, resolve) => {
+const searchFromText = async(searchText, db, resolve) => {
     db.collection('stations').where("search_index", "array-contains-any", [searchText[0]])
         .get()
         .then((querySnapshot) => {
