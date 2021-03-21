@@ -124,7 +124,7 @@ const profileContent = ({id, name, charactor_name, image_url, place_guide, info,
             "action": {
               "type": "uri",
               "label": `${name}駅に向かう`,
-              "uri": "https://linecorp.com"
+              "uri": `https://www.google.com/maps/dir//${name}駅/`
             },
             "color": ( registration ? "#ffab00" : "#52D053" ),
             "margin": "sm",
