@@ -34,6 +34,15 @@ const createSearchStationsResponse = (docs, userId) => {
               "type": "location",
               "label": "GPS検索"
             }
+          },
+          {
+            "type": "action",
+            "action": {
+              "type": "postback",
+              "data": "{\"type\":\"allStation\"}",
+              "label": "全ての駅を見る",
+              "text": "全ての駅を表示する"
+            }
           }
         ]
       }
