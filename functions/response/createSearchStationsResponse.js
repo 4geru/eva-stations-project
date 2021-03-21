@@ -48,8 +48,8 @@ const createSearchStationsResponse = (docs, userId) => {
             "action": {
               "type": "postback",
               "data": "{\"type\":\"registrationStation\"}",
-              "label": "登録一覧",
-              "text": "登録一覧を表示する"
+              "label": "📚を見る",
+              "text": "📚を表示する"
             }
           },
           {

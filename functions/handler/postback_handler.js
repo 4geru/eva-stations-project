@@ -7,14 +7,14 @@ const postbackHandler = (client, event, db, data) => {
     if(data.type === 'registration') {
         bookmark.registration(db, data.docId, event.source.userId)
         client.replyMessage(event.replyToken, [
-            { type: 'text', text: `${data.stationName}駅を登録したよ` },
+            { type: 'text', text: `${data.stationName}駅を📚に追加したよ` },
         ])
         return;
     }
     if(data.type === 'unRegistration') {
         bookmark.unRegistration(db, data.docId, event.source.userId)
         client.replyMessage(event.replyToken, [
-            { type: 'text', text: `${data.stationName}駅を解除したよ` },
+            { type: 'text', text: `${data.stationName}駅を📚から削除したよ` },
         ])
         return;
     }

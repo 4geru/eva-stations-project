@@ -98,8 +98,8 @@ const profileContent = ({id, name, charactor_name, image_url, place_guide, info,
               "type": "button",
               "action": {
                 "type": "postback",
-                "label": `${name}駅を解除`,
-                "text": `${name}駅を解除する`,
+                "label": `${name}駅を📚から削除`,
+                "text": `${name}駅を📚から削除する`,
                 "data": JSON.stringify({type: 'unRegistration', docId: id, stationName: name})
               },
               "color": "#e50000",
@@ -110,8 +110,8 @@ const profileContent = ({id, name, charactor_name, image_url, place_guide, info,
               "type": "button",
               "action": {
                 "type": "postback",
-                "label": `${name}駅を登録`,
-                "text": `${name}駅を登録する`,
+                "label": `${name}駅を📚に追加`,
+                "text": `${name}駅を📚に追加する`,
                 "data": JSON.stringify({type: 'registration', docId: id, stationName: name})
               },
               "color": "#5b496c",
